@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Patient Front Desk
 
-## Getting Started
+> AI receptionist for clinics — patient intake, scheduling, and insurance verification.
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-15-000?logo=next.js)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer%20Motion-12-ec4899?logo=framer)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)
+
+A density-first front-desk console for a primary-care clinic. Patient intake, scheduling, and insurance verification all sit in one workspace, with the AI assistant working in the margins — auto-completing forms, suggesting time slots that fit, drafting payer phone scripts when an eligibility check fails.
+
+Designed in the spirit of Linear / Vercel / Stripe — a tool a front-desk lead can actually live in.
+
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3003](http://localhost:3003).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# production build
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Routes
 
-## Learn More
+| Path | What it shows |
+| --- | --- |
+| `/` | Waiting-room dashboard — 5-stat ribbon, today's appointment list grouped morning/afternoon, AI-handled stats card, "Needs your eye" exception queue. |
+| `/patient/[id]` | Patient detail — banner with allergies and primary insurance, today's appointment + AI summary on the left, auto-filled intake form with confidence rings + verification badges in the center, insurance card + medication reconciliation + action items on the right. |
+| `/scheduling` | Time-blocked calendar (5 providers × 8am–6pm), provider switcher chips, plus a right-rail with two queues: "Needs scheduling" (AI-suggested slot + fit reason) and "Insurance verification" (status pill + AI-drafted phone script). |
 
-To learn more about Next.js, take a look at the following resources:
+## Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Next.js 15** (App Router, RSC, `generateStaticParams` for patient pages)
+- **Tailwind CSS v4** with a minimal token system (`bg`, `bg-elev`, `border`, `text`, `text-mute`, `accent`, etc.)
+- **Framer Motion** for stagger entrances and quiet card transitions
+- **lucide-react** for line icons
+- **TypeScript** end-to-end, no `any`, no `@ts-ignore`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`next/font` handles **Inter** (sans), **Space Grotesk** (display), **JetBrains Mono** (mono).
 
-## Deploy on Vercel
+## Design tokens
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Spacing is on a 4px rhythm (4–96). Radii: 6 / 10 / 16. Motion: 200–300 ms with `cubic-bezier(0.4, 0, 0.2, 1)`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Accent: `#14b8a6`.
+
+## Screenshots
+
+![Waiting room dashboard](./public/screenshots/dashboard.png)
+![Patient detail with auto-filled intake](./public/screenshots/detail.png)
+![Scheduling and insurance queue](./public/screenshots/hero.png)
+
+## Notes
+
+All data is seeded — no backend, no PHI. Names, MRNs, and plan IDs are fabricated. Clinical content is restricted to common, well-controlled conditions and standard medications, used to make the UI feel real, not to model decision support.
